@@ -7,7 +7,9 @@ import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,6 +47,19 @@ public class Main extends ListenerAdapter {
                     event.getGuild().addRoleToMember(member, role).queue();
                     event.getChannel().sendMessage("Applied the role: " + role.getAsMention() + " to the user: " + member.getUser()).queue();
                 }
+            }
+        }
+
+        if (arguments[0].equals("!addreaction")) { // !addreaction <channel> <messageID> <emote>
+            if (arguments.length == 4 ) {
+                TextChannel textChannel = event.getMessage().getMentionedChannels().get(0);
+                if (textChannel != null) {
+                    String emote = arguments[3];
+                    textChannel.addReactionById(Long.parseLong(arguments[2]), emote).queue();
+                    event.getChannel().sendMessage("Successfully applied the reaction.").queue();
+                }
+            } else {
+                event.getChannel().sendMessage("Please use the right format for this command!").queue();
             }
         }
     }
