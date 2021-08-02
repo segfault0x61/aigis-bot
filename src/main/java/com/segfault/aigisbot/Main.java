@@ -1,5 +1,7 @@
 package com.segfault.aigisbot;
 
+import com.segfault.aigisbot.config.ConfigFile;
+import com.segfault.aigisbot.config.ConfigValues;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -15,7 +17,10 @@ public class Main extends ListenerAdapter {
 
     public static void main(String[] args) {
 
-        JDABuilder jdaBuilder = JDABuilder.createDefault("TOKEN GOES HERE");
+        ConfigFile.loadConfig();
+        ConfigValues.loadValues();
+
+        JDABuilder jdaBuilder = JDABuilder.createDefault(ConfigValues.BOT_TOKEN);
 
         jdaBuilder.setStatus(OnlineStatus.IDLE);
         jdaBuilder.setActivity(Activity.playing("SMT and Persona"));
