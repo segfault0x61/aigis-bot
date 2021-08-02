@@ -8,3 +8,6 @@ build
 .gradle
 log/
 out
+
+config.yml
+src/main/resources/config.yml
