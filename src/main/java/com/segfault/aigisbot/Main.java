@@ -1,12 +1,10 @@
 package com.segfault.aigisbot;
 
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.events.guild.update.GuildUpdateNameEvent;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -14,11 +12,10 @@ import org.jetbrains.annotations.NotNull;
 import javax.security.auth.login.LoginException;
 
 public class Main extends ListenerAdapter {
-    private static JDABuilder jdaBuilder;
 
     public static void main(String[] args) {
 
-        jdaBuilder = JDABuilder.createDefault("NzgzMzQ0MDU2MzEwMzAwNjkz.X8ZYAA._u44QPiHWHtyFLBTs9G6t5hhpC8");
+        JDABuilder jdaBuilder = JDABuilder.createDefault("TOKEN GOES HERE");
 
         jdaBuilder.setStatus(OnlineStatus.IDLE);
         jdaBuilder.setActivity(Activity.playing("SMT and Persona"));
@@ -35,28 +32,14 @@ public class Main extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
         String[] arguments = event.getMessage().getContentRaw().split(" ");
-        if (arguments[0].equals("!sendembed")) {
-            EmbedBuilder embedBuilder = new EmbedBuilder();
-
-            embedBuilder.setTitle("Hey I am a embed for discord");
-            embedBuilder.setColor(0x90c695);
-            embedBuilder.setDescription("Hello you have successfully created your first embed message!\nThis is a test of new line!");
-            embedBuilder.setFooter("This is just a simple footer.", event.getAuthor().getAvatarUrl());
-            embedBuilder.setThumbnail(event.getAuthor().getAvatarUrl());
-            embedBuilder.setImage(event.getAuthor().getAvatarUrl());
-
-            event.getChannel().sendMessage(embedBuilder.build()).queue();
-        }
-    }
-
-    @Override
-    public void onGuildUpdateName(@NotNull GuildUpdateNameEvent event) {
-        TextChannel textChannel = event.getGuild().getSystemChannel();
-        if (textChannel != null) {
-            String newName = event.getNewName();
-            String oldName = event.getOldName();
-            if (newName.equals("Test Discord")) {
-                textChannel.sendMessage("The discord server was renamed from **" + oldName + "** to **" + newName + "**!").queue();
+        if (arguments[0].equals("!setrole")) { // !setrole <user> <role>
+            Member member = event.getMessage().getMentionedMembers().get(0);
+            if (member != null) {
+                Role role = event.getGuild().getRoleById(arguments[2]);
+                if (role != null) {
+                    event.getGuild().addRoleToMember(member, role).queue();
+                    event.getChannel().sendMessage("Applied the role: " + role.getAsMention() + " to the user: " + member.getUser()).queue();
+                }
             }
         }
     }
