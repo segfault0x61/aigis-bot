@@ -1,8 +1,6 @@
 package com.segfault.aigisbot.commands;
 
-import com.segfault.aigisbot.commands.commands.ClearCommand;
-import com.segfault.aigisbot.commands.commands.HelpCommand;
-import com.segfault.aigisbot.commands.commands.KickCommand;
+import com.segfault.aigisbot.commands.commands.*;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -16,11 +14,15 @@ public class CommandManager extends ListenerAdapter {
     private final HelpCommand helpCommand;
     private final ClearCommand clearCommand;
     private final KickCommand kickCommand;
+    private final BanCommand banCommand;
+    private final UnBanCommand unBanCommand;
 
     public CommandManager() {
         this.helpCommand = new HelpCommand();
         this.clearCommand = new ClearCommand();
         this.kickCommand = new KickCommand();
+        this.banCommand = new BanCommand();
+        this.unBanCommand = new UnBanCommand();
     }
 
     @Override
@@ -41,6 +43,12 @@ public class CommandManager extends ListenerAdapter {
                     break;
                 case "!kick":
                     this.kickCommand.performCommand(arguments, guild, member, textChannel, message);
+                    break;
+                case "!ban":
+                    this.banCommand.performCommand(arguments, guild, member, textChannel, message);
+                    break;
+                case "!unban":
+                    this.unBanCommand.performCommand(arguments, guild, member, textChannel, message);
                     break;
             }
         }
