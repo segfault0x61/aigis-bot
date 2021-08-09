@@ -16,6 +16,7 @@ public class CommandManager extends ListenerAdapter {
     private final KickCommand kickCommand;
     private final BanCommand banCommand;
     private final UnBanCommand unBanCommand;
+    private final CooldownCommand cooldownCommand;
 
     public CommandManager() {
         this.helpCommand = new HelpCommand();
@@ -23,6 +24,7 @@ public class CommandManager extends ListenerAdapter {
         this.kickCommand = new KickCommand();
         this.banCommand = new BanCommand();
         this.unBanCommand = new UnBanCommand();
+        this.cooldownCommand = new CooldownCommand();
     }
 
     @Override
@@ -49,6 +51,9 @@ public class CommandManager extends ListenerAdapter {
                     break;
                 case "!unban":
                     this.unBanCommand.performCommand(arguments, guild, member, textChannel, message);
+                    break;
+                case "!cooldown":
+                    this.cooldownCommand.performCommand(arguments, guild, member, textChannel, message);
                     break;
             }
         }
